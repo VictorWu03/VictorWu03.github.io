@@ -1,5 +1,6 @@
 // 02 - 2d array demo
 //9/29/2020
+//
 
 let grid;
 let cellWidth;
