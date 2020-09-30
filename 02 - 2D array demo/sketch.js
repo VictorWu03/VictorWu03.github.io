@@ -2,15 +2,31 @@
 //9/29/2020
 
 let grid;
+let cellWidth;
+let cellHeight;
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
   grid = generateRandomGrid(10);
+  cellWidth = width/grid[0].length;
+  cellHeight = height/grid.length;  
 }
 
 function draw() {
   background(220);
   displayGrid();
+}
+
+function mousePressed() {
+  let cellX = floor(mouseX/cellWidth);
+  let cellY = floor(mouseY/cellHeight);
+
+  if (grid[cellY][cellX] === 0) {
+    grid[cellY][cellX] = 1;
+  }
+  else {
+    grid[cellY][cellX] = 0;
+  }
 }
 
 function keyPressed() {
@@ -36,10 +52,6 @@ function generateRandomGrid(gridSize) {
 }
 
 function displayGrid() {
-
-  let cellWidth = width/grid[0].length;
-  let cellHeight = height/grid.length;
-
   for (let y = 0; y < grid.length; y ++) {
     for (let x = 0; x < grid[y].length; x ++) {
       if (grid[y][x] === 0) {
