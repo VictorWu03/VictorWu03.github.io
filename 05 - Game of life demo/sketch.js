@@ -5,7 +5,7 @@
 let grid;
 let cellWidth;
 let cellHeight;
-const GRIDSIZE = 10; //variable that never changes
+const GRIDSIZE = 50; //variable that never changes
 let autoPlay  = false;
 
 function setup() {
