@@ -62,38 +62,43 @@ function keyPressed() {
 function takeNextTurn() {
   let nextTurn = generateEmptyGrid(GRIDSIZE);
 
-  for (let y = 0; y < GRIDSIZE; y ++) {
-    for (let x = 0; x < GRIDSIZE; x ++) {
+  for (let y=0; y<GRIDSIZE; y++) {
+    for (let x=0; x<GRIDSIZE; x++) {
+      
       //count neighbors
       let neighbors = 0;
-      for (let i = -1; i <= 1; i ++) {
-        for (let j = -1; j <= 1; j ++) {
-
-          if(y + i >= 0 && y + i < GRIDSIZE && x + j >= 0 && x + j < GRIDSIZE){
-            neighbors += grid[y + i][j + i];
+      for (let i=-1; i<=1; i++) {
+        for (let j=-1; j<=1; j++) {
+          if (y+i >= 0 && y+i < GRIDSIZE && x+j >=0 && x+j < GRIDSIZE) {
+            neighbors += grid[y+i][x+j];
           }
         }
       }
+
       //subtract self from neighbor count
       neighbors -= grid[y][x];
 
-      //apply rules
-      //since defaut is in the state of dead, we only need to account for situations here they become alive
+      
+      //apply the rules
+      //only worry about when they are alive, as the nextTurn
+      //array is already all set to dead
+      
       //if dead
-      if(grid[y][x] === 0) {
+      if (grid[y][x] === 0) {
         if (neighbors === 3) {
           nextTurn[y][x] = 1;
         }
       }
 
       //if alive
-      if(grid[y][x] === 1){
-        if(neighbors === 2 || neighbors === 3) {
+      if (grid[y][x] === 1) {
+        if (neighbors === 2 || neighbors === 3) {
           nextTurn[y][x] = 1;
         }
       }
     }
   }
+
   grid = nextTurn;
 }
 
