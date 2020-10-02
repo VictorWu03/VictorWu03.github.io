@@ -10,6 +10,8 @@ let centerBoardY;
 let centerPlayX;
 let centerPlayY;
 
+let whiteTurn;
+
 function setup() {
   createCanvas(windowWidth, windowHeight);
   if (windowWidth <= windowHeight) {
@@ -31,7 +33,7 @@ function setup() {
 function draw() {
   background(218, 184, 136); //Wooden board color
   displayBoard();
-  // generatePlayBoard();
+  generatePlayBoard();
 }
 
 function displayBoard() {
@@ -44,12 +46,23 @@ function displayBoard() {
   }
 }
 
-// function generatePlayBoard() {
-//   for (let x = 0; x < PLAYDIMENSION; x ++) {
-//     for (let y = 0; y < PLAYDIMENSION; y ++) {
-//       stroke(255);
-//       fill(218, 184, 136);
-//       square(cellSize * x + centerPlayX, cellSize * y + centerPlayY, cellSize);
-//     }
-//   }
-// }
+function generatePlayBoard() {
+  for (let x = 0; x < PLAYDIMENSION; x ++) {
+    for (let y = 0; y < PLAYDIMENSION; y ++) {
+      stroke(255);
+      noFill();
+      square(cellSize * x + centerPlayX, cellSize * y + centerPlayY, cellSize);
+    }
+  }
+}
+
+function mousePressed() {
+  let corX = floor(mouseX/cellSize + centerPlayX);
+  let corY = floor(mouseY/cellSize + centerPlayY);
+  placePiece(corX, corY);
+  console.log(corX, corY);
+}
+
+function placePiece(x, y) {
+
+}
