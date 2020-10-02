@@ -31,18 +31,20 @@ function setup() {
   centerPlayX = (windowWidth - cellSize * PLAYDIMENSION) /2;
   centerPlayY = (windowHeight - cellSize * PLAYDIMENSION) /2;
 
+  generatePlayBoard();
+
 }
 
 function draw() {
   displayBoard();
-  generatePlayBoard();
+
 }
 
 function displayBoard() {
   for (let x = 0; x < BOARDDIMENSION; x ++) {
     for (let y = 0; y < BOARDDIMENSION; y ++) {
       stroke(0);
-      fill(218, 184, 136);
+      noFill();
       square(cellSize * x + centerBoardX, cellSize * y + centerBoardY, cellSize);
     }
   }
@@ -50,12 +52,15 @@ function displayBoard() {
 
 function generatePlayBoard() {
   for (let x = 0; x < PLAYDIMENSION; x ++) {
+    board.push([]);
     for (let y = 0; y < PLAYDIMENSION; y ++) {
       stroke(255);
       noFill();
       square(cellSize * x + centerPlayX, cellSize * y + centerPlayY, cellSize);
+      board[x].push(0);
     }
   }
+  return board;
 }
 
 function mousePressed() {
