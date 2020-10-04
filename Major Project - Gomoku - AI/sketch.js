@@ -30,14 +30,13 @@ function setup() {
   // determining the padding distance is center the playing grid
   centerPlayX = (windowWidth - cellSize * PLAYDIMENSION) /2;
   centerPlayY = (windowHeight - cellSize * PLAYDIMENSION) /2;
-
+  
   generatePlayBoard();
 
 }
 
 function draw() {
   displayBoard();
-
 }
 
 function displayBoard() {
@@ -67,6 +66,14 @@ function mousePressed() {
   // corX and corY adjusting for the centered grid
   let corX = floor(mouseX/cellSize - centerPlayX/cellSize); 
   let corY = floor(mouseY/cellSize - centerPlayY/cellSize);
+  placeMarker(corX, corY);
   console.log(corX, corY);
 }
 
+function placeMarker(x, y) {
+  if (board[x][y] === 0) {
+    board[x][y] = 1;
+  }
+  circle(board[x]/2, board[y]/2, cellSize/3);
+  return board;
+}
