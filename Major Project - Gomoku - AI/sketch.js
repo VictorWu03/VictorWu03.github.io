@@ -13,6 +13,7 @@ let centerPlayY;
 let board = [];
 
 let currentMove = "white";
+let winner = null;
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
@@ -39,6 +40,7 @@ function setup() {
 
 function draw() {
   displayBoard();
+  checkWin();
 }
 
 function displayBoard() {
@@ -73,15 +75,15 @@ function mousePressed() {
 }
 
 function placeMarker(x, y) {
-  if (board[x][y] === 0) {
+  if (board[y][x] === 0) {
     if (currentMove === "white") {
-      board[x][y] = 1;
+      board[y][x] = 1;
       fill(currentMove);
       circle(cellSize * x + centerPlayX + cellSize/2, cellSize * y + centerPlayY + cellSize/2, cellSize * 0.85);
       currentMove = "black";
     }
     else {
-      board[x][y] = -1;
+      board[y][x] = -1;
       fill(currentMove);
       circle(cellSize * x + centerPlayX + cellSize/2, cellSize * y + centerPlayY + cellSize/2, cellSize * 0.85);
       currentMove = "white";
@@ -91,16 +93,22 @@ function placeMarker(x, y) {
 }
 
 function checkWin() {
-
+  let consecutive = 0;
+  let currentState = null;
   //vertical
   for(let x = 0; x < board.length - 4; x ++) {
     for (let y = 0; y < board.length; y ++) {
-      if(board[x][y] === board[x + 1][y] && board[x + 1][y] === board[x + 2][y] && board[x + 2][y] === board[x + 3][y] && board[x + 3][y] === board[x + 4][y]) {
-        if (board === "white") {
-          text("Whitewin")
-        }
+      if (currentState === null) {
+        currentState = board[y][x];
+      }
+      else if (currentState === board[y][x]) {
+        consecutive += 1;
+      }
+      else {
+        currentState = board[x][y];
+        consecutive = 0;
       }
     }
-
   }
+
 }
