@@ -12,6 +12,8 @@ let centerPlayY;
 
 let board = [];
 
+let currentMove = "white";
+
 function setup() {
   createCanvas(windowWidth, windowHeight);
   background(218, 184, 136); //Wooden board color
@@ -72,8 +74,33 @@ function mousePressed() {
 
 function placeMarker(x, y) {
   if (board[x][y] === 0) {
-    board[x][y] = 1;
+    if (currentMove === "white") {
+      board[x][y] = 1;
+      fill(currentMove);
+      circle(cellSize * x + centerPlayX + cellSize/2, cellSize * y + centerPlayY + cellSize/2, cellSize * 0.85);
+      currentMove = "black";
+    }
+    else {
+      board[x][y] = -1;
+      fill(currentMove);
+      circle(cellSize * x + centerPlayX + cellSize/2, cellSize * y + centerPlayY + cellSize/2, cellSize * 0.85);
+      currentMove = "white";
+    }
   }
-  circle(board[x]/2, board[y]/2, cellSize/3);
   return board;
+}
+
+function checkWin() {
+
+  //vertical
+  for(let x = 0; x < board.length - 4; x ++) {
+    for (let y = 0; y < board.length; y ++) {
+      if(board[x][y] === board[x + 1][y] && board[x + 1][y] === board[x + 2][y] && board[x + 2][y] === board[x + 3][y] && board[x + 3][y] === board[x + 4][y]) {
+        if (board === "white") {
+          text("Whitewin")
+        }
+      }
+    }
+
+  }
 }
