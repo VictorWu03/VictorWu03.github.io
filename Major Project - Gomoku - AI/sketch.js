@@ -13,7 +13,8 @@ let centerPlayY;
 let board = [];
 
 let currentMove = "white";
-let winner = null;
+
+let winner;
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
@@ -60,7 +61,7 @@ function generatePlayBoard() {
       stroke(255);
       noFill();
       square(cellSize * x + centerPlayX, cellSize * y + centerPlayY, cellSize);
-      board[x].push(0);
+      board[x].push(null);
     }
   }
   return board;
@@ -75,40 +76,54 @@ function mousePressed() {
 }
 
 function placeMarker(x, y) {
-  if (board[y][x] === 0) {
+  if (board[y][x] === null) {
     if (currentMove === "white") {
-      board[y][x] = 1;
+      board[y][x] = "W";
       fill(currentMove);
       circle(cellSize * x + centerPlayX + cellSize/2, cellSize * y + centerPlayY + cellSize/2, cellSize * 0.85);
       currentMove = "black";
     }
     else {
-      board[y][x] = -1;
+      board[y][x] = "B";
       fill(currentMove);
       circle(cellSize * x + centerPlayX + cellSize/2, cellSize * y + centerPlayY + cellSize/2, cellSize * 0.85);
       currentMove = "white";
     }
   }
+
   return board;
+
 }
 
 function checkWin() {
   let consecutive = 0;
-  let currentState = null;
+
   //vertical
-  for(let x = 0; x < board.length - 4; x ++) {
+  for(let x = 0; x < board.length; x ++) {
     for (let y = 0; y < board.length; y ++) {
-      if (currentState === null) {
-        currentState = board[y][x];
-      }
-      else if (currentState === board[y][x]) {
-        consecutive += 1;
-      }
-      else {
-        currentState = board[x][y];
-        consecutive = 0;
-      }
+      if (board[y][x] !== null) {
+        consecutive = 1;
+        if (board[y + 1][x])
+
+
+      //   if (currentState === null) {
+      //     currentState = board[y][x];
+      //     consecutive = 1;
+      //   }
+      //   else if (currentState === board[y][x]) {
+      //     consecutive += 1;
+      //     if (consecutive > 4) {
+      //       winner = currentState;
+      //       return winner;
+      //     }
+      //   }
+      //   else {
+      //     currentState = board[y][x];
+      //     consecutive = 0;
+      //   }
+      //   console.log(currentState);
+      // }
     }
   }
-
+  //horozontal
 }
