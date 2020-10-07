@@ -1,6 +1,8 @@
 // Gomoku
 // 10/1/2020 - 
 
+let state = "play";
+
 let cellSize;
 const BOARDDIMENSION = 18; // visable grid displayed on the board
 const PLAYDIMENSION = 19; // invisable grid to place pieces on
@@ -35,13 +37,16 @@ function setup() {
   centerPlayX = (windowWidth - cellSize * PLAYDIMENSION) /2;
   centerPlayY = (windowHeight - cellSize * PLAYDIMENSION) /2;
   
-  generatePlayBoard();
 
 }
 
 function draw() {
-  displayBoard();
-  checkWin();
+
+  if (state === "play") {
+    generatePlayBoard();
+    displayBoard();
+    checkWin();
+  }
 }
 
 function displayBoard() {
@@ -58,7 +63,7 @@ function generatePlayBoard() {
   for (let x = 0; x < PLAYDIMENSION; x ++) {
     board.push([]);
     for (let y = 0; y < PLAYDIMENSION; y ++) {
-      stroke(255);
+      noStroke();
       noFill();
       square(cellSize * x + centerPlayX, cellSize * y + centerPlayY, cellSize);
       board[x].push(null);
@@ -96,34 +101,31 @@ function placeMarker(x, y) {
 }
 
 function checkWin() {
-  let consecutive = 0;
-
-  //vertical
+  //horozontal
   for(let x = 0; x < board.length; x ++) {
     for (let y = 0; y < board.length; y ++) {
       if (board[y][x] !== null) {
-        consecutive = 1;
-        if (board[y + 1][x])
-
-
-      //   if (currentState === null) {
-      //     currentState = board[y][x];
-      //     consecutive = 1;
-      //   }
-      //   else if (currentState === board[y][x]) {
-      //     consecutive += 1;
-      //     if (consecutive > 4) {
-      //       winner = currentState;
-      //       return winner;
-      //     }
-      //   }
-      //   else {
-      //     currentState = board[y][x];
-      //     consecutive = 0;
-      //   }
-      //   console.log(currentState);
-      // }
+        //horozontal
+        if ((board[y][x] === board[y][x + 1]) && (board[y][x] === board[y][x + 2]) && (board[y][x] === board[y][x + 3]) && (board[y][x] === board[y][x + 4])) {
+          winner = board[y][x];
+          return winner;
+        }
+        //vertical
+        if ((board[y][x] === board[y + 1][x]) && (board[y][x] === board[y + 2][x]) && (board[y][x] === board[y + 3][x]) && (board[y][x] === board[y + 4][x])) {
+          winner = board[y][x];
+          return winner;
+        }
+        //diagonal down-right
+        if ((board[y][x] === board[y + 1][x + 1]) && (board[y][x] === board[y + 2][x + 2]) && (board[y][x] === board[y + 3][x + 3]) && (board[y][x] === board[y + 4][x + 4])) {
+          winner = board[y][x];
+          return winner;
+        }
+        //diagonal up-right
+        if ((board[y][x] === board[y - 1][x + 1]) && (board[y][x] === board[y - 2][x + 2]) && (board[y][x] === board[y - 3][x + 3]) && (board[y][x] === board[y - 4][x + 4])) {
+          winner = board[y][x];
+          return winner;
+        }
+      }
     }
   }
-  //horozontal
 }
