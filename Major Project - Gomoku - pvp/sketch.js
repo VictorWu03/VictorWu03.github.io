@@ -20,7 +20,7 @@ let winner;
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
-  background(218, 184, 136); //Wooden board color
+  // background(218, 184, 136); //Wooden board color
 
   if (windowWidth <= windowHeight) {
     cellSize = windowWidth / 20;
@@ -36,13 +36,39 @@ function setup() {
   // determining the padding distance is center the playing grid
   centerPlayX = (windowWidth - cellSize * PLAYDIMENSION) /2;
   centerPlayY = (windowHeight - cellSize * PLAYDIMENSION) /2;
+
+}
+
+function keyTyped() {
+  if (key === " ") {
+    state = "menu";
+    stateMenu();
+  }
+  if (key === "a") {
+    state = "play";
+    statePlay();
+  }
+}
+
+function stateMenu() {
+  background(255);
+  text("GOMOKU", width/2, height/2);
+  text("Press 'a' to play", width/2, height/3);
+}
+
+function statePlay() {
+  background(218, 184, 136);
   displayBoard();
   generatePlayBoard();
 }
 
-
 function draw() {
-  checkWin();
+  if (state === "play") {
+    checkWin();
+  }
+  else if (state === "menu") {
+    stateMenu();
+  }
 }
 
 function displayBoard() {
