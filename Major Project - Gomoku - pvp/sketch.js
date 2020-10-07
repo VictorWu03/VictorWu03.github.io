@@ -37,41 +37,66 @@ function setup() {
   centerPlayX = (windowWidth - cellSize * PLAYDIMENSION) /2;
   centerPlayY = (windowHeight - cellSize * PLAYDIMENSION) /2;
 
-}
-
-function keyTyped() {
-  if (key === " ") {
-    state = "menu";
-    stateMenu();
-  }
-  if (key === "a") {
-    state = "play";
-    statePlay();
-  }
-}
-
-function stateMenu() {
-  background(255);
-  text("GOMOKU", width/2, height/2);
-  text("Press 'a' to play", width/2, height/3);
-}
-
-function statePlay() {
   background(218, 184, 136);
-  displayBoard();
-  generatePlayBoard();
+  // displayBoard();
 }
 
 function draw() {
   if (state === "play") {
     checkWin();
   }
-  else if (state === "menu") {
-    stateMenu();
+  if (state === "menu") {
+    displayMenu();
+  }
+  if (state === "win") {
+    displayWin();
   }
 }
 
+//menu interface - switching between the states of menu and game
+function keyPressed() {
+  if (key === "s") {
+    background(218, 184, 136);
+    displayBoard();
+    generatePlayBoard();
+    state = "play";
+  }
+  if (key === " ") {
+    state = "menu";
+  }
+}
+
+function displayWin() {
+  if (winner !== null) {
+    if (winner === "W"){
+      background("white");
+      fill("black");
+      textSize(width * 0.05);
+      textAlign(CENTER, CENTER);
+      text("White Wins", width/2, height/3);
+    }
+    else if (winner === "B") {
+      background("black");
+      fill("white");
+      textSize(width * 0.05);
+      textAlign(CENTER, CENTER);
+      text("Black Wins", width/2, height/3);
+    }
+  }
+}
+
+function displayMenu() {
+  background(0);
+  fill("white");
+  textSize(width * 0.02);
+  textAlign(CENTER, CENTER);
+  text("GOMOKU", width/2, height/3);
+  text("press 's' to start a game", width/2, height/2);
+}
+
+//displaying the playing board
 function displayBoard() {
+  background(218, 184, 136);
   for (let x = 0; x < BOARDDIMENSION; x ++) {
     for (let y = 0; y < BOARDDIMENSION; y ++) {
       stroke(0);
@@ -81,6 +106,7 @@ function displayBoard() {
   }
 }
 
+//generating board for play pieces to appear on
 function generatePlayBoard() {
   for (let x = 0; x < PLAYDIMENSION; x ++) {
     board.push([]);
@@ -94,6 +120,7 @@ function generatePlayBoard() {
   return board;
 }
 
+//placing playing pieces
 function mousePressed() {
   // corX and corY adjusting for the centered grid
   let corX = floor(mouseX/cellSize - centerPlayX/cellSize); 
@@ -102,6 +129,7 @@ function mousePressed() {
   console.log(corX, corY);
 }
 
+//saving information of current cell i.e. black, white, and null into the 2D-array
 function placeMarker(x, y) {
   if (board[y][x] === null) {
     if (currentMove === "white") {
@@ -117,11 +145,10 @@ function placeMarker(x, y) {
       currentMove = "white";
     }
   }
-
   return board;
-
 }
 
+//Checking for 5 in a row;
 function checkWin() {
   //horozontal
   for(let x = 0; x < board.length; x ++) {
@@ -131,6 +158,7 @@ function checkWin() {
         if (x < board.length - 4) { //checking boundaries 
           if ((board[y][x] === board[y][x + 1]) && (board[y][x] === board[y][x + 2]) && (board[y][x] === board[y][x + 3]) && (board[y][x] === board[y][x + 4])) {
             winner = board[y][x];
+            state = "win";
             return winner;
           }
         }
@@ -138,6 +166,7 @@ function checkWin() {
         if (y < board.length - 4) {
           if ((board[y][x] === board[y + 1][x]) && (board[y][x] === board[y + 2][x]) && (board[y][x] === board[y + 3][x]) && (board[y][x] === board[y + 4][x])) {
             winner = board[y][x];
+            state = "win";
             return winner;
           }
         }
@@ -145,6 +174,7 @@ function checkWin() {
         if (y < board.length - 4 && x < board.length - 4) {
           if ((board[y][x] === board[y + 1][x + 1]) && (board[y][x] === board[y + 2][x + 2]) && (board[y][x] === board[y + 3][x + 3]) && (board[y][x] === board[y + 4][x + 4])) {
             winner = board[y][x];
+            state = "win";
             return winner;
           }
         }
@@ -152,6 +182,7 @@ function checkWin() {
         if (x < board.length - 4 && y > 3) {
           if ((board[y][x] === board[y - 1][x + 1]) && (board[y][x] === board[y - 2][x + 2]) && (board[y][x] === board[y - 3][x + 3]) && (board[y][x] === board[y - 4][x + 4])) {
             winner = board[y][x];
+            state = "win";
             return winner;
           }
         }
