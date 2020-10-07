@@ -37,16 +37,13 @@ function setup() {
   centerPlayX = (windowWidth - cellSize * PLAYDIMENSION) /2;
   centerPlayY = (windowHeight - cellSize * PLAYDIMENSION) /2;
   
-
+  generatePlayBoard();
 }
 
 function draw() {
 
-  if (state === "play") {
-    generatePlayBoard();
-    displayBoard();
-    checkWin();
-  }
+  displayBoard();
+  checkWin();
 }
 
 function displayBoard() {
