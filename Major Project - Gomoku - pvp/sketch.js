@@ -49,6 +49,7 @@ function draw() {
   }
   if (state === "win") {
     displayWin();
+    restart();
   }
 }
 
@@ -92,6 +93,13 @@ function displayWin() {
       textAlign(CENTER, CENTER);
       text("Black Wins", width/2, height/2);
     }
+  }
+}
+
+function restart() {
+  if (state === "win") {
+    fill(0, 0, 0, 10);
+    rect(width/2 - width * 0.3, height/2 - height * 0.25/2 + height * 0.25, width * 0.3, height * 0.1);
   }
 }
 
