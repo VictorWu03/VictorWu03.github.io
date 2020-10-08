@@ -41,16 +41,14 @@ function setup() {
 }
 
 function draw() {
-  if (state === "play") {
-    checkWin();
-  }
-  if (state === "menu") {
-    displayMenu();
-  }
-  if (state === "win") {
-    displayWin();
-    restart();
-  }
+  displayMenu();
+
+  restart();
+  returnToMenu();
+  playerTurnBar();
+
+  checkWin();
+  displayWin();
 }
 
 //menu interface - switching between the states of menu and game
@@ -59,9 +57,6 @@ function keyPressed() {
     gameSetup();
     state = "play";
   }
-  if (key === " ") {
-    state = "menu";
-  }
 }
 
 function gameSetup() {
@@ -69,6 +64,7 @@ function gameSetup() {
   displayBoard();
   generatePlayBoard();
   currentMove = "black";
+  state = "play";
 }
 
 function displayWin() {
@@ -96,21 +92,64 @@ function displayWin() {
   }
 }
 
+//restart button
 function restart() {
-  if (state === "win") {
-    fill(0, 0, 0, 10);
-    rect(width/2 - width * 0.3, height/2 - height * 0.25/2 + height * 0.25, width * 0.3, height * 0.1);
+  if (state === "win" || state === "play") {
+    fill("black");
+    rect(width * 0.8, height * 0.8, width*0.15, height * 0.1);
+    fill("white");
+    textSize(width * 0.02);
+    text("Restart", width * 0.8 + width*0.15/2, height * 0.8 + height * 0.1/2);
+    if (mouseX > width * 0.8 && mouseX < width * 0.8 + width*0.15 && mouseY >  height * 0.8 && mouseY <  height * 0.8 + height * 0.1) {
+      fill("white");
+      rect(width * 0.8, height * 0.8, width*0.15, height * 0.1);
+      fill("black");
+      text("Restart", width * 0.8 + width*0.15/2, height * 0.8 + height * 0.1/2);
+      if(mouseIsPressed) {
+        gameSetup();
+      }
+    }
   }
 }
 
+function returnToMenu() {
+  if (state === "win" || state === "play") {
+    fill("black");
+    rect(width * 0.8, height * 0.7, width*0.15, height * 0.1);
+    fill("white");
+    textSize(width * 0.02);
+    text("Home", width * 0.8 + width*0.15/2, height * 0.7 + height * 0.1/2);
+    if (mouseX > width * 0.8 && mouseX < width * 0.8 + width*0.15 && mouseY >  height * 0.7 && mouseY <  height * 0.7 + height * 0.1) {
+      fill("white");
+      rect(width * 0.8, height * 0.7, width*0.15, height * 0.1);
+      fill("black");
+      text("Home", width * 0.8 + width*0.15/2, height * 0.7 + height * 0.1/2);
+      if(mouseIsPressed) {
+        state = "menu";
+      }
+    }
+  }
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 //game elements
 function displayMenu() {
-  background(0);
-  fill("white");
-  textSize(width * 0.02);
-  textAlign(CENTER, CENTER);
-  text("GOMOKU", width/2, height/3);
-  text("press 's' to start a game", width/2, height/2);
+  if (state === "menu") {
+    background(0);
+    fill("white");
+    textSize(width * 0.02);
+    textAlign(CENTER, CENTER);
+    text("GOMOKU", width/2, height/3);
+    text("press 's' to start a game", width/2, height/2);
+  }
+}
+
+function playerTurnBar() {
+  if (state === "play" || state === "win") {
+    fill(currentMove);
+    rect(centerBoardX, height * 0.98, cellSize * BOARDDIMENSION, height * 0.01);
+  }
 }
 
 //displaying the playing board
@@ -142,11 +181,13 @@ function generatePlayBoard() {
 
 //placing playing pieces
 function mousePressed() {
-  // corX and corY adjusting for the centered grid
-  let corX = floor(mouseX/cellSize - centerPlayX/cellSize); 
-  let corY = floor(mouseY/cellSize - centerPlayY/cellSize);
-  placeMarker(corX, corY);
-  console.log(corX, corY);
+  if (state === "play") {
+    // corX and corY adjusting for the centered grid
+    let corX = floor(mouseX/cellSize - centerPlayX/cellSize); 
+    let corY = floor(mouseY/cellSize - centerPlayY/cellSize);
+    placeMarker(corX, corY);
+    console.log(corX, corY);
+  }
 }
 
 //saving information of current cell i.e. black, white, and null into the 2D-array
@@ -170,40 +211,42 @@ function placeMarker(x, y) {
 
 //Checking for 5 in a row;
 function checkWin() {
-  //horozontal
-  for(let x = 0; x < board.length; x ++) {
-    for (let y = 0; y < board.length; y ++) {
-      if (board[y][x] !== null) {
-        //horozontal
-        if (x < board.length - 4) { //checking boundaries 
-          if ((board[y][x] === board[y][x + 1]) && (board[y][x] === board[y][x + 2]) && (board[y][x] === board[y][x + 3]) && (board[y][x] === board[y][x + 4])) {
-            winner = board[y][x];
-            state = "win";
-            return winner;
+  if (state === "play") {
+    //horozontal
+    for(let x = 0; x < board.length; x ++) {
+      for (let y = 0; y < board.length; y ++) {
+        if (board[y][x] !== null) {
+          //horozontal
+          if (x < board.length - 4) { //checking boundaries 
+            if ((board[y][x] === board[y][x + 1]) && (board[y][x] === board[y][x + 2]) && (board[y][x] === board[y][x + 3]) && (board[y][x] === board[y][x + 4])) {
+              winner = board[y][x];
+              state = "win";
+              return winner;
+            }
           }
-        }
-        //vertical
-        if (y < board.length - 4) {
-          if ((board[y][x] === board[y + 1][x]) && (board[y][x] === board[y + 2][x]) && (board[y][x] === board[y + 3][x]) && (board[y][x] === board[y + 4][x])) {
-            winner = board[y][x];
-            state = "win";
-            return winner;
+          //vertical
+          if (y < board.length - 4) {
+            if ((board[y][x] === board[y + 1][x]) && (board[y][x] === board[y + 2][x]) && (board[y][x] === board[y + 3][x]) && (board[y][x] === board[y + 4][x])) {
+              winner = board[y][x];
+              state = "win";
+              return winner;
+            }
           }
-        }
-        //diagonal down-right
-        if (y < board.length - 4 && x < board.length - 4) {
-          if ((board[y][x] === board[y + 1][x + 1]) && (board[y][x] === board[y + 2][x + 2]) && (board[y][x] === board[y + 3][x + 3]) && (board[y][x] === board[y + 4][x + 4])) {
-            winner = board[y][x];
-            state = "win";
-            return winner;
+          //diagonal down-right
+          if (y < board.length - 4 && x < board.length - 4) {
+            if ((board[y][x] === board[y + 1][x + 1]) && (board[y][x] === board[y + 2][x + 2]) && (board[y][x] === board[y + 3][x + 3]) && (board[y][x] === board[y + 4][x + 4])) {
+              winner = board[y][x];
+              state = "win";
+              return winner;
+            }
           }
-        }
-        //diagonal up-right
-        if (x < board.length - 4 && y > 3) {
-          if ((board[y][x] === board[y - 1][x + 1]) && (board[y][x] === board[y - 2][x + 2]) && (board[y][x] === board[y - 3][x + 3]) && (board[y][x] === board[y - 4][x + 4])) {
-            winner = board[y][x];
-            state = "win";
-            return winner;
+          //diagonal up-right
+          if (x < board.length - 4 && y > 3) {
+            if ((board[y][x] === board[y - 1][x + 1]) && (board[y][x] === board[y - 2][x + 2]) && (board[y][x] === board[y - 3][x + 3]) && (board[y][x] === board[y - 4][x + 4])) {
+              winner = board[y][x];
+              state = "win";
+              return winner;
+            }
           }
         }
       }
