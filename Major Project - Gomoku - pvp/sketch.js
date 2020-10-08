@@ -14,9 +14,10 @@ let centerPlayY;
 
 let board = [];
 
-let currentMove = "white";
-
+let currentMove = "black";
 let winner;
+
+let hovering = false;
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
@@ -37,8 +38,6 @@ function setup() {
   centerPlayX = (windowWidth - cellSize * PLAYDIMENSION) /2;
   centerPlayY = (windowHeight - cellSize * PLAYDIMENSION) /2;
 
-  background(218, 184, 136);
-  // displayBoard();
 }
 
 function draw() {
@@ -56,9 +55,7 @@ function draw() {
 //menu interface - switching between the states of menu and game
 function keyPressed() {
   if (key === "s") {
-    background(218, 184, 136);
-    displayBoard();
-    generatePlayBoard();
+    gameSetup();
     state = "play";
   }
   if (key === " ") {
@@ -66,25 +63,39 @@ function keyPressed() {
   }
 }
 
+function gameSetup() {
+  background(218, 184, 136);
+  displayBoard();
+  generatePlayBoard();
+  currentMove = "black";
+}
+
 function displayWin() {
-  if (winner !== null) {
+  if (state === "win") {
     if (winner === "W"){
-      background("white");
+      //winner message - white
+      fill(255, 255, 255, 10);
+      // rectMode(CENTER);
+      rect(width/2 - width * 0.3, height/2 - height * 0.25/2, width * 0.6, height * 0.25);
       fill("black");
       textSize(width * 0.05);
       textAlign(CENTER, CENTER);
-      text("White Wins", width/2, height/3);
+      text("White Wins", width/2, height/2);
     }
     else if (winner === "B") {
-      background("black");
+      //winner message - black
+      fill(0, 0, 0, 10);
+      // rectMode(CENTER);
+      rect(width/2 - width * 0.3, height/2 - height * 0.25/2, width * 0.6, height * 0.25);
       fill("white");
       textSize(width * 0.05);
       textAlign(CENTER, CENTER);
-      text("Black Wins", width/2, height/3);
+      text("Black Wins", width/2, height/2);
     }
   }
 }
 
+//game elements
 function displayMenu() {
   background(0);
   fill("white");
@@ -108,6 +119,7 @@ function displayBoard() {
 
 //generating board for play pieces to appear on
 function generatePlayBoard() {
+  board = [];
   for (let x = 0; x < PLAYDIMENSION; x ++) {
     board.push([]);
     for (let y = 0; y < PLAYDIMENSION; y ++) {
