@@ -1,5 +1,12 @@
-// Gomoku
-// 10/1/2020 - 
+// Victor Wu
+//2D - Grid assignemtn
+// 10/1/2020
+//GOMOKU:
+//The goal of the game is to connect 5 in a row
+//extra for experts: 
+// I implemented code to actively check the state of each cell in the 2d array in relation to the other cells around it (check for 5 in a row feature).
+// Additionally, I also included numerous interface features such as the win display and buttons
+// I am intending on further expanding on this to create an ai the human can play against where the program is able to evaluate current board states and determine the best move.
 
 let state = "menu";
 
@@ -17,11 +24,8 @@ let board = [];
 let currentMove = "black";
 let winner;
 
-let hovering = false;
-
 function setup() {
   createCanvas(windowWidth, windowHeight);
-  // background(218, 184, 136); //Wooden board color
 
   if (windowWidth <= windowHeight) {
     cellSize = windowWidth / 20;
@@ -37,7 +41,6 @@ function setup() {
   // determining the padding distance is center the playing grid
   centerPlayX = (windowWidth - cellSize * PLAYDIMENSION) /2;
   centerPlayY = (windowHeight - cellSize * PLAYDIMENSION) /2;
-
 }
 
 function draw() {
@@ -59,6 +62,7 @@ function keyPressed() {
   }
 }
 
+//setting up the display board and the play board for the game
 function gameSetup() {
   background(218, 184, 136);
   displayBoard();
@@ -67,6 +71,7 @@ function gameSetup() {
   state = "play";
 }
 
+//Winner message
 function displayWin() {
   if (state === "win") {
     if (winner === "W"){
@@ -79,6 +84,7 @@ function displayWin() {
       textAlign(CENTER, CENTER);
       text("White Wins", width/2, height/2);
     }
+
     else if (winner === "B") {
       //winner message - black
       fill(0, 0, 0, 10);
@@ -92,7 +98,7 @@ function displayWin() {
   }
 }
 
-//restart button
+//restart button to reset game
 function restart() {
   if (state === "win" || state === "play") {
     fill("black");
@@ -100,11 +106,13 @@ function restart() {
     fill("white");
     textSize(width * 0.02);
     text("Restart", width * 0.8 + width*0.15/2, height * 0.8 + height * 0.1/2);
+
     if (mouseX > width * 0.8 && mouseX < width * 0.8 + width*0.15 && mouseY >  height * 0.8 && mouseY <  height * 0.8 + height * 0.1) {
       fill("white");
       rect(width * 0.8, height * 0.8, width*0.15, height * 0.1);
       fill("black");
       text("Restart", width * 0.8 + width*0.15/2, height * 0.8 + height * 0.1/2);
+
       if(mouseIsPressed) {
         gameSetup();
       }
@@ -112,6 +120,7 @@ function restart() {
   }
 }
 
+//button to return to the main menu/start screen
 function returnToMenu() {
   if (state === "win" || state === "play") {
     fill("black");
@@ -119,11 +128,13 @@ function returnToMenu() {
     fill("white");
     textSize(width * 0.02);
     text("Home", width * 0.8 + width*0.15/2, height * 0.7 + height * 0.1/2);
+
     if (mouseX > width * 0.8 && mouseX < width * 0.8 + width*0.15 && mouseY >  height * 0.7 && mouseY <  height * 0.7 + height * 0.1) {
       fill("white");
       rect(width * 0.8, height * 0.7, width*0.15, height * 0.1);
       fill("black");
       text("Home", width * 0.8 + width*0.15/2, height * 0.7 + height * 0.1/2);
+
       if(mouseIsPressed) {
         state = "menu";
       }
@@ -134,6 +145,7 @@ function returnToMenu() {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //game elements
+//main menu display
 function displayMenu() {
   if (state === "menu") {
     background(0);
@@ -141,10 +153,11 @@ function displayMenu() {
     textSize(width * 0.02);
     textAlign(CENTER, CENTER);
     text("GOMOKU", width/2, height/3);
-    text("press 's' to start a game", width/2, height/2);
+    text("press 's' to start a game. The goal is to connect 5 in a row.", width/2, height/2);
   }
 }
 
+//UI bar to display which turn it is: black or white
 function playerTurnBar() {
   if (state === "play" || state === "win") {
     fill(currentMove);
@@ -152,7 +165,7 @@ function playerTurnBar() {
   }
 }
 
-//displaying the playing board
+//displaying the VISABLE playing board 
 function displayBoard() {
   background(218, 184, 136);
   for (let x = 0; x < BOARDDIMENSION; x ++) {
@@ -164,7 +177,7 @@ function displayBoard() {
   }
 }
 
-//generating board for play pieces to appear on
+//generating board/2d array for play pieces to appear on and store game information i.e. what color occupies a cell - this grid is not visable. 
 function generatePlayBoard() {
   board = [];
   for (let x = 0; x < PLAYDIMENSION; x ++) {
@@ -172,14 +185,14 @@ function generatePlayBoard() {
     for (let y = 0; y < PLAYDIMENSION; y ++) {
       noStroke();
       noFill();
-      square(cellSize * x + centerPlayX, cellSize * y + centerPlayY, cellSize);
+      square(cellSize * x + centerPlayX, cellSize * y + centerPlayY, cellSize); //dimensions accounting for centering of the grid
       board[x].push(null);
     }
   }
   return board;
 }
 
-//placing playing pieces
+//placing playing pieces when the mouse is pressed
 function mousePressed() {
   if (state === "play") {
     // corX and corY adjusting for the centered grid
@@ -190,18 +203,20 @@ function mousePressed() {
   }
 }
 
-//saving information of current cell i.e. black, white, and null into the 2D-array
+//saving information of current cell i.e. black, white, and null into the 2D-array when the mouse is pressed. This also displays the game piece.
 function placeMarker(x, y) {
   if (board[y][x] === null) {
     if (currentMove === "white") {
       board[y][x] = "W";
       fill(currentMove);
+      //drawing circle in cell accounting for padding
       circle(cellSize * x + centerPlayX + cellSize/2, cellSize * y + centerPlayY + cellSize/2, cellSize * 0.85);
       currentMove = "black";
     }
     else {
       board[y][x] = "B";
       fill(currentMove);
+      //drawing circle in cell accounting for padding
       circle(cellSize * x + centerPlayX + cellSize/2, cellSize * y + centerPlayY + cellSize/2, cellSize * 0.85);
       currentMove = "white";
     }
@@ -212,7 +227,6 @@ function placeMarker(x, y) {
 //Checking for 5 in a row;
 function checkWin() {
   if (state === "play") {
-    //horozontal
     for(let x = 0; x < board.length; x ++) {
       for (let y = 0; y < board.length; y ++) {
         if (board[y][x] !== null) {
@@ -225,7 +239,7 @@ function checkWin() {
             }
           }
           //vertical
-          if (y < board.length - 4) {
+          if (y < board.length - 4) { //checking boundaries 
             if ((board[y][x] === board[y + 1][x]) && (board[y][x] === board[y + 2][x]) && (board[y][x] === board[y + 3][x]) && (board[y][x] === board[y + 4][x])) {
               winner = board[y][x];
               state = "win";
@@ -233,7 +247,7 @@ function checkWin() {
             }
           }
           //diagonal down-right
-          if (y < board.length - 4 && x < board.length - 4) {
+          if (y < board.length - 4 && x < board.length - 4) { //checking boundaries 
             if ((board[y][x] === board[y + 1][x + 1]) && (board[y][x] === board[y + 2][x + 2]) && (board[y][x] === board[y + 3][x + 3]) && (board[y][x] === board[y + 4][x + 4])) {
               winner = board[y][x];
               state = "win";
@@ -241,7 +255,7 @@ function checkWin() {
             }
           }
           //diagonal up-right
-          if (x < board.length - 4 && y > 3) {
+          if (x < board.length - 4 && y > 3) { //checking boundaries 
             if ((board[y][x] === board[y - 1][x + 1]) && (board[y][x] === board[y - 2][x + 2]) && (board[y][x] === board[y - 3][x + 3]) && (board[y][x] === board[y - 4][x + 4])) {
               winner = board[y][x];
               state = "win";
