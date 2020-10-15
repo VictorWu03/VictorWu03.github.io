@@ -192,6 +192,8 @@ function mousePressed() {
     placeMarker(corX, corY);
     console.log(corX, corY);
   }
+  // evaluateBoardState();
+
 }
 
 //saving information of current cell i.e. black, white, and null into the 2D-array
@@ -265,149 +267,117 @@ function checkWin() {
   }
 }
 
-function evaluateBoardState() {
-  //consecutive
-  if (state === "play") {
-    //horozontal
-    let consecutivePoint;
-    let openSpace;
-
-    for(let x = 0; x < board.length; x ++) {
-      for (let y = 0; y < board.length; y ++) {
-        if (board[y][x] === "white") {
-          consecutivePoint = 0;
-          //horozontal
-          if (x < board.length - 4) { //checking boundaries 
-            if (board[y][x] === board[y][x + 1]) {
-              consecutivePoint += 10;
-              if (board[y][x] === board[y][x + 2]) {
-                consecutivePoint += 30;
-                if (board[y][x] === board[y][x + 3]) {
-                  consecutivePoint += 70;
-                  if (board[y][x] === board[y][x + 4]) {
-                    consecutivePoint += 100;
-                  }
-                }
-              }
-            }
-          }
-          //vertical
-          if (y < board.length - 4) {
-            if (board[y][x] === board[y + 1][x]) {
-              consecutivePoint += 10;
-              if (board[y][x] === board[y + 2][x]) {
-                consecutivePoint += 30;
-                if (board[y][x] === board[y + 3][x]) {
-                  consecutivePoint += 70;
-                  if (board[y][x] === board[y + 4][x]) {
-                    consecutivePoint += 100;
-                  } 
-                }
-              } 
-            }
-          }
-          //diagonal down-right
-          if (y < board.length - 4) {
-            if (board[y][x] === board[y + 1][x + 1]) {
-              consecutivePoint += 10;
-              if (board[y][x] === board[y + 2][x + 2]) {
-                consecutivePoint += 30;
-                if (board[y][x] === board[y + 3][x + 3]) {
-                  consecutivePoint += 70;
-                  if (board[y][x] === board[y + 4][x + 4]) {
-                    consecutivePoint += 100;
-                  } 
-                }
-              } 
-            }
-          }
-
-          //diagonal up-right
-          if (y < board.length - 4) {
-            if (board[y][x] === board[y - 1][x + 1]) {
-              consecutivePoint += 10;
-              if (board[y][x] === board[y - 2][x + 2]) {
-                consecutivePoint += 30;
-                if (board[y][x] === board[y - 3][x + 3]) {
-                  consecutivePoint += 70;
-                  if (board[y][x] === board[y - 4][x + 4]) {
-                    consecutivePoint += 100;
-                  } 
-                }
-              } 
-            }
-          }
-          whitePoints += consecutivePoint;
-        }
-        if (board[y][x] === "black") {
-          consecutivePoint = 0;
-          //horozontal
-          if (x < board.length - 4) { //checking boundaries 
-            if (board[y][x] === board[y][x + 1]) {
-              consecutivePoint += 10;
-              if (board[y][x] === board[y][x + 2]) {
-                consecutivePoint += 30;
-                if (board[y][x] === board[y][x + 3]) {
-                  consecutivePoint += 70;
-                  if (board[y][x] === board[y][x + 4]) {
-                    consecutivePoint += 100;
-                  }
-                }
-              }
-            }
-          }
-          //vertical
-          if (y < board.length - 4) {
-            if (board[y][x] === board[y + 1][x]) {
-              consecutivePoint += 10;
-              if (board[y][x] === board[y + 2][x]) {
-                consecutivePoint += 30;
-                if (board[y][x] === board[y + 3][x]) {
-                  consecutivePoint += 70;
-                  if (board[y][x] === board[y + 4][x]) {
-                    consecutivePoint += 100;
-                  } 
-                }
-              } 
-            }
-          }
-          //diagonal down-right
-          if (y < board.length - 4) {
-            if (board[y][x] === board[y + 1][x + 1]) {
-              consecutivePoint += 10;
-              if (board[y][x] === board[y + 2][x + 2]) {
-                consecutivePoint += 30;
-                if (board[y][x] === board[y + 3][x + 3]) {
-                  consecutivePoint += 70;
-                  if (board[y][x] === board[y + 4][x + 4]) {
-                    consecutivePoint += 100;
-                  } 
-                }
-              } 
-            }
-          }
-
-          //diagonal up-right
-          if (y < board.length - 4) {
-            if (board[y][x] === board[y - 1][x + 1]) {
-              consecutivePoint += 10;
-              if (board[y][x] === board[y - 2][x + 2]) {
-                consecutivePoint += 30;
-                if (board[y][x] === board[y - 3][x + 3]) {
-                  consecutivePoint += 70;
-                  if (board[y][x] === board[y - 4][x + 4]) {
-                    consecutivePoint += 100;
-                  } 
-                }
-              } 
-            }
-          }
-        }
-      }
-      blackPoints += consecutivePoint;
-    }
-  }
-}
+// function evaluateBoardState() {
+//   //consecutive
+//   blackPoints = 0;
+//   whitePoints = 0;
+//   if (state === "play") {
+//     //horozontal
+//     for(let x = 0; x < board.length; x ++) {
+//       for (let y = 0; y < board.length; y ++) {
+//         if (board[y][x] === "white") {
+//           //horozontal
+//           if (x < board.length - 4) { //checking boundaries 
+//             if (board[y][x] === board[y][x + 1]) {
+//               if (board[y][x] === board[y][x + 2]) {
+//                 if (board[y][x] === board[y][x + 3]) {
+//                   if (board[y][x] === board[y][x + 4]) {
+//                     whitePoints += 100;
+//                   }
+//                   else{
+//                     whitePoints += 70;
+//                   }
+//                 }
+//                 else {
+//                   whitePoints += 30;
+//                 }
+//               }
+//               else {
+//                 whitePoints += 10;
+//               }
+//             }
+//             else {
+//               whitePoints += 0;
+//             }
+//           }
+//           // Vertical
+//           if (x < board.length - 4) { //checking boundaries 
+//             if (board[y][x] === board[y + 1][x]) {
+//               if (board[y][x] === board[y + 2][x]) {
+//                 if (board[y][x] === board[y + 3][x]) {
+//                   if (board[y][x] === board[y + 4][x]) {
+//                     whitePoints += 100;
+//                   }
+//                   else{
+//                     whitePoints += 70;
+//                   }
+//                 }
+//                 else {
+//                   whitePoints += 30;
+//                 }
+//               }
+//               else {
+//                 whitePoints += 10;
+//               }
+//             }
+//             else {
+//               whitePoints += 0;
+//             }
+//           }
+//           //diagonal down-right
+//           if (x < board.length - 4) { //checking boundaries 
+//             if (board[y][x] === board[y + 1][x + 1]) {
+//               if (board[y][x] === board[y + 2][x + 2]) {
+//                 if (board[y][x] === board[y + 3][x + 3]) {
+//                   if (board[y][x] === board[y + 4][x + 4]) {
+//                     whitePoints += 100;
+//                   }
+//                   else{
+//                     whitePoints += 70;
+//                   }
+//                 }
+//                 else {
+//                   whitePoints += 30;
+//                 }
+//               }
+//               else {
+//                 whitePoints += 10;
+//               }
+//             }
+//             else {
+//               whitePoints += 0;
+//             }
+//           }
+//           //diagonal up-right
+//           if (x < board.length - 4) { //checking boundaries 
+//             if (board[y][x] === board[y - 1][x + 1]) {
+//               if (board[y][x] === board[y - 2][x + 2]) {
+//                 if (board[y][x] === board[y - 3][x + 3]) {
+//                   if (board[y][x] === board[y - 4][x + 4]) {
+//                     whitePoints += 100;
+//                   }
+//                   else{
+//                     whitePoints += 70;
+//                   }
+//                 }
+//                 else {
+//                   whitePoints += 30;
+//                 }
+//               }
+//               else {
+//                 whitePoints += 10;
+//               }
+//             }
+//             else {
+//               whitePoints += 0;
+//             }
+//           }
+//         }
+//       }
+//     }
+//     console.log(whitePoints);
+//   }
+// }
 
 function computerMove() {
   if (state === "play" && turnState === "computer") {
